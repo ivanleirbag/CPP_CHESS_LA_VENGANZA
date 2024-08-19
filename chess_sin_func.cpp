@@ -135,7 +135,7 @@ int main(){
 
             //-----------Dibujado de las instrucciones-----------//
             move(1, 45); printw("CONTROLES");
-            move(2, 45); printw("────────────────────────────────────────");
+            move(2, 45); printw("───────────────────────────────────");
             if(mostrar_mov){
                 move(4, 45);
                 switch (pieza.figura)
@@ -152,7 +152,9 @@ int main(){
                     default:
                         break;
                     }
-                move(6, 45); printw("PRESIONE CUALQUIER TECLA PARA DESELECCIONAR");
+                move(6, 45); printw("PRESIONE CUALQUIER TECLA");
+                move(7, 45); printw("PARA DESELECCIONAR");
+                move(9, 45); printw("PRESIONE [ESC] PARA SALIR");
             }else{
                 move(4, 45); printw("[ENTER]"); move(4, 57); printw("Mostrar movimientos");
                 move(6, 45); printw("[FLECHAS]"); move(6, 57); printw("Mover selector");
@@ -168,15 +170,9 @@ int main(){
             switch (key){
             //Cerrar el menu o juego
             case 27:
-                if(pieza.seleccionada)
-                {
-                    pieza.seleccionada = false;
-                    mostrar_mov = false;
-                }else{
-                    endwin();
-                    jugando = false;
-                    menu = false;
-                }
+                jugando = false;
+                menu = false;
+                endwin();
                 break;
             //ENTER input
             case 10:
