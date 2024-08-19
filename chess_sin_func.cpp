@@ -99,32 +99,32 @@ int main(){
                         }
                     }else if(mostrar_mov && (i-1)%3 == 0){
                         switch(pieza.figura){
-                            //-----------Dibujado de los movimientos del alfil-----------//
-                            case 'A':
-                                if((pieza.x-j==pieza.y-i/3)||((i/3)+j == pieza.x+pieza.y)){
-                                    printw("  ♦  ");
-                                }else{
-                                    printw("     ");
-                                }
+                        //-----------Dibujado de los movimientos del alfil-----------//
+                        case 'A':
+                            if((pieza.x-j==pieza.y-i/3)||((i/3)+j == pieza.x+pieza.y)){
+                                printw("  ♦  ");
+                            }else{
+                                printw("     ");
+                            }
+                        break;
+                        //-----------Dibujado de los movimientos de la torre-----------//
+                        case 'T':
+                            if(pieza.y == i/3 || pieza.x == j){
+                                printw("  ♦  ");
+                            }else{
+                                printw("     ");
+                            }
                             break;
-                            //-----------Dibujado de los movimientos de la torre-----------//
-                            case 'T':
-                                if(pieza.y == i/3 || pieza.x == j){
-                                    printw("  ♦  ");
-                                }else{
-                                    printw("     ");
-                                }
-                                break;
-                            //-----------Dibujado de los movimientos de la reina-----------//
-                            case 'R':
-                                if(pieza.y == i/3 || pieza.x == j || (pieza.x-j==pieza.y-i/3)||((i/3)+j == pieza.x+pieza.y)){
-                                    printw("  ♦  ");
-                                }else{
-                                    printw("     ");
-                                }
-                                break;
-                            default:
-                             break;
+                        //-----------Dibujado de los movimientos de la reina-----------//
+                        case 'R':
+                            if(pieza.y == i/3 || pieza.x == j || (pieza.x-j==pieza.y-i/3)||((i/3)+j == pieza.x+pieza.y)){
+                                printw("  ♦  ");
+                            }else{
+                                printw("     ");
+                            }
+                            break;
+                        default:
+                            break;
                         }
                     }else{
                         printw("     ");
@@ -139,19 +139,19 @@ int main(){
             if(mostrar_mov){
                 move(4, 45);
                 switch (pieza.figura)
-                    {
-                    case 'A':
-                        printw("ALFIL SELECCIONADO { ♝ }");
-                        break;
-                    case 'T':
-                        printw("TORRE SELECCIONADA { ♜ }");
-                        break;
-                    case 'R':
-                        printw("REINA SELECCIONADA { ♛ }");
-                        break;
-                    default:
-                        break;
-                    }
+                {
+                case 'A':
+                    printw("ALFIL SELECCIONADO { ♝ }");
+                    break;
+                case 'T':
+                    printw("TORRE SELECCIONADA { ♜ }");
+                    break;
+                case 'R':
+                    printw("REINA SELECCIONADA { ♛ }");
+                    break;
+                default:
+                    break;
+                }
                 move(6, 45); printw("PRESIONE CUALQUIER TECLA");
                 move(7, 45); printw("PARA DESELECCIONAR");
                 move(9, 45); printw("PRESIONE [ESC] PARA SALIR");
