@@ -1,6 +1,8 @@
 #include <ncurses.h>
 #include <iostream>
 #include <string.h>
+#include <locale.h>
+
 
 int i, j, k, l, key;
 int posx = 0;
@@ -20,8 +22,10 @@ int main(){
    
     //---------------- inicializacion de ncurses----------------//
     //-------------- e inicializacion de la pieza-------------//
-    initscr();
+    setlocale(LC_ALL, ""); //Inicializo caracteres unicode   
+    initscr(); 
     keypad(stdscr, TRUE);
+
     Pieza pieza; 
         pieza.x = 9; 
         pieza.y = 9;
@@ -53,7 +57,6 @@ int main(){
         }
         //---------------- bucle del juego----------------//
         while (jugando){
-
             //----------------Renderizado del tablero----------------//
             move(0,0);
             for (i = 0; i<24; i++){
@@ -62,24 +65,44 @@ int main(){
                     if((i/3+j)%2){
                         attron(A_REVERSE);
                     }
-
-                    //--------Dibujado del selector-------//
-                    if(posy == i/3 && posx == j && (i%3 == 0 || (i+1)%3 == 0)/*Chequea que el selector esté en la primer o última fila*/){
-                        if (mostrar_mov){
-                            printw(" $ $ ");
+                    //--------Dibujado del selector-------///*&& (i%3 == 0 || (i+1)%3 == 0)/*Chequea que el selector esté en la primer o última fila*/
+                    if(posy == i/3 && posx == j&& (i%3 == 0 || (i+1)%3 == 0)){
+                        if (mostrar_mov ){
+                            if(i%3 == 0){
+                                printw("▼   ▼");
+                            }else if((i+1)%3 == 0){
+                                printw("▲   ▲");
+                            }
                         }else{
-                            printw(" = = ");
+                            if(i%3 == 0){
+                                printw("┌   ┐");
+                            }else if((i+1)%3 == 0){
+                                printw("└   ┘");
+                            }    
                         }
                     //--------Chequea si la pieza está en el centro del casillero-------//
                     //-----------------------y dibujado de la pieza---------------------//   
                     }else if(pieza.seleccionada && pieza.x == j && pieza.y == i/3){   
-                        printw("  %c  ", pieza.figura);
+                        switch (pieza.figura)
+                        {
+                        case 'A':
+                            printw("  ♝  ");
+                            break;
+                        case 'T':
+                            printw("  ♜  ");
+                            break;
+                        case 'R':
+                            printw("  ♛  ");
+                            break;
+                        default:
+                            break;
+                        }
                     }else if(mostrar_mov && (i-1)%3 == 0){
                         switch(pieza.figura){
                             //-----------Dibujado de los movimientos del alfil-----------//
                             case 'A':
                                 if((pieza.x-j==pieza.y-i/3)||((i/3)+j == pieza.x+pieza.y)){
-                                    printw("  0  ");
+                                    printw("  ♦  ");
                                 }else{
                                     printw("     ");
                                 }
@@ -87,7 +110,7 @@ int main(){
                             //-----------Dibujado de los movimientos de la torre-----------//
                             case 'T':
                                 if(pieza.y == i/3 || pieza.x == j){
-                                    printw("  0  ");
+                                    printw("  ♦  ");
                                 }else{
                                     printw("     ");
                                 }
@@ -95,7 +118,7 @@ int main(){
                             //-----------Dibujado de los movimientos de la reina-----------//
                             case 'R':
                                 if(pieza.y == i/3 || pieza.x == j || (pieza.x-j==pieza.y-i/3)||((i/3)+j == pieza.x+pieza.y)){
-                                    printw("  0  ");
+                                    printw("  ♦  ");
                                 }else{
                                     printw("     ");
                                 }
@@ -105,13 +128,39 @@ int main(){
                         }
                     }else{
                         printw("     ");
-                    }
-                    
+                    }      
                 }       
                 printw("\n");
             }
 
-
+            //-----------Dibujado de las instrucciones-----------//
+            move(1, 45); printw("CONTROLES");
+            move(2, 45); printw("────────────────────────────────────────");
+            if(mostrar_mov){
+                move(4, 45);
+                switch (pieza.figura)
+                    {
+                    case 'A':
+                        printw("ALFIL SELECCIONADO { ♝ }");
+                        break;
+                    case 'T':
+                        printw("TORRE SELECCIONADA { ♜ }");
+                        break;
+                    case 'R':
+                        printw("REINA SELECCIONADA { ♛ }");
+                        break;
+                    default:
+                        break;
+                    }
+                move(6, 45); printw("PRESIONE CUALQUIER TECLA PARA DESELECCIONAR");
+            }else{
+                move(4, 45); printw("[ENTER]"); move(4, 57); printw("Mostrar movimientos");
+                move(6, 45); printw("[FLECHAS]"); move(6, 57); printw("Mover selector");
+                move(8, 45); printw("[A]"); move(8, 57); printw("Seleccionar alfil { ♝ }");
+                move(10, 45); printw("[T]"); move(10, 57); printw("Seleccionar torre { ♜ }");
+                move(12, 45); printw("[R]"); move(12, 57); printw("Seleccionar reina { ♛ }");
+                move(14, 45); printw("[ESC]"); move(14, 57); printw("Salir");
+            }
 
             //---------------- INPUT en el juego----------------//
             key = getch();
@@ -135,18 +184,21 @@ int main(){
                     mostrar_mov = !mostrar_mov;
                 }
                 break;
+            //A y a input
             case 65: case 97:
                 pieza.seleccionada = true;
                 pieza.figura = 'A';
                 pieza.x = posx;
                 pieza.y = posy;
                 break;
+            //R y r input
             case 82: case 114:
                 pieza.seleccionada = true;
                 pieza.figura = 'R';
                 pieza.x = posx;
                 pieza.y = posy;
                 break;
+            //T y t input
             case 84: case 116:
                 pieza.seleccionada = true;
                 pieza.figura = 'T';
@@ -155,17 +207,34 @@ int main(){
                 break;
             //FLECHAS input
             case KEY_LEFT:
-                if (posx > 0){posx -= 1; pieza.x = posx;}
+                if(mostrar_mov){
+                    mostrar_mov = false;
+                }else if (posx > 0){
+                    posx -= 1; pieza.x = posx;
+                }
                 break;
             case KEY_RIGHT:
-                if (posx<7){posx += 1; pieza.x = posx;}
+                if(mostrar_mov){
+                    mostrar_mov = false;
+                }else if (posx<7){
+                    posx += 1; pieza.x = posx;
+                }
                 break;
             case KEY_UP:
-                if (posy > 0){posy -= 1; pieza.y = posy;}
+                if(mostrar_mov){
+                    mostrar_mov = false;
+                }else if (posy > 0){
+                    posy -= 1; pieza.y = posy;
+                }
                 break;
             case KEY_DOWN:
-                if (posy<7){posy += 1; pieza.y = posy;}
+                if(mostrar_mov){
+                    mostrar_mov = false;
+                }else if (posy<7){
+                    posy += 1; pieza.y = posy;
+                }
                 break;
+            //Cualquier otra tecla cancela el dibujado de movimientos
             default:
                 mostrar_mov = false;
                 break;
