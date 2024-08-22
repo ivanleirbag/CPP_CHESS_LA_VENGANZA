@@ -2,7 +2,8 @@
 #include <iostream>
 #include <string.h>
 #include <locale.h>
-
+//Alumno: Peceto, Iván Gabriel      Legajo: 7197
+//Comando para compilar en linux:  g++ -Wall -g ./chess_sin_func.cpp -o chess -lncursesw
 
 int i, j, k, l, key;
 int posx = 0;
